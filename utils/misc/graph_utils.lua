@@ -12,16 +12,16 @@ graph = {
 
 
 
-local graphutils = {}
-function graphutils.euclideanDistance(x1, y1, x2, y2)
+local graph_utils = {}
+function graph_utils.euclideanDistance(x1, y1, x2, y2)
   return fmath.sqrt(((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1)))
 end
 
-function graphutils.basicHeuristic(Graph, node, sinkIndex)
-  return graphutils.euclideanDistance(Graph[node].position[1], Graph[node].position[2], Graph[sinkIndex].position[1], Graph[sinkIndex].position[2])
+function graph_utils.basicHeuristic(Graph, node, sinkIndex)
+  return graph_utils.euclideanDistance(Graph[node].position[1], Graph[node].position[2], Graph[sinkIndex].position[1], Graph[sinkIndex].position[2])
 end
 
-function graphutils.aStar(Graph, sourceIndex, sinkIndex, heuristic)
+function graph_utils.aStar(Graph, sourceIndex, sinkIndex, heuristic)
   local cameFrom = {}
 
   local gScore = {}
@@ -92,7 +92,7 @@ function graphutils.aStar(Graph, sourceIndex, sinkIndex, heuristic)
   return nil
 end
 
-function graphutils.DFS(Graph)
+function graph_utils.DFS(Graph)
   local s = {0}
   local discovered = {}
   while next(s)~=nil do
@@ -107,8 +107,8 @@ function graphutils.DFS(Graph)
   return discovered
 end
 
-function graphutils.isConnected(Graph)
-  local discovered = graphutils.DFS(Graph)
+function graph_utils.isConnected(Graph)
+  local discovered = graph_utils.DFS(Graph)
   for vertex, _ in pairs(Graph) do
     if table.contains(discovered, vertex)==nil then
       return false
@@ -117,8 +117,8 @@ function graphutils.isConnected(Graph)
   return true
 end
 
-function graphutils.findBridges(Graph)
-  assert(graphutils.isConnected(Graph), "Unconnected graph cannot be tested for bridges")
+function graph_utils.findBridges(Graph)
+  assert(graph_utils.isConnected(Graph), "Unconnected graph cannot be tested for bridges")
   local processed = {}
   local bridges = {}
   for startVertexIndex, startVertex in pairs(Graph) do
@@ -133,13 +133,13 @@ function graphutils.findBridges(Graph)
       end
       if not processedContainsCurrentEdge then
         table.insert(processed, {startVertexIndex, endVertexIndex})
-        local tempGraph = graphutils.duplicateGraph(Graph)
-        graphutils.removeConnection(tempGraph)
-        if not graphutils.isConnected(tempGraph) then table.insert(bridges, {startVertexIndex, endVertexIndex}) end
+        local tempGraph = graph_utils.duplicateGraph(Graph)
+        graph_utils.removeConnection(tempGraph)
+        if not graph_utils.isConnected(tempGraph) then table.insert(bridges, {startVertexIndex, endVertexIndex}) end
       end
     end
   end
   return bridges
 end
 
-return graphutils
+return graph_utils
